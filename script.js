@@ -1,8 +1,21 @@
 /* ─────────────────────────────────────────────
-   🎵 AUDIO
+   🎵 AUDIO UNLOCK (ANTI iPHONE)
 ───────────────────────────────────────────── */
 
 const audio = document.getElementById('bg-audio');
+
+// Desbloquea el audio en móviles al primer toque
+document.addEventListener('touchstart', function unlockAudio() {
+  if (!audio) return;
+
+  audio.play().then(() => {
+    audio.pause();
+    audio.currentTime = 0;
+  }).catch(() => {});
+
+  document.removeEventListener('touchstart', unlockAudio);
+}, { once: true });
+
 
 
 /* ─────────────────────────────────────────────
@@ -14,27 +27,31 @@ function openEnvelope() {
   const env = document.getElementById('envelope');
   const screen = document.getElementById('envelope-screen');
 
-  if (env.classList.contains('open')) return;
+  if (!env || env.classList.contains('open')) return;
 
   env.classList.add('open');
 
-  const playAudio = () => {
-    audio.currentTime = 5;   // Empieza desde el segundo 5
-    audio.volume = 0.4;      // Volumen elegante
-    audio.play().catch(() => {});
-  };
+  // 🔥 Iniciar música correctamente
+  if (audio) {
+    audio.currentTime = 5;      // empieza desde segundo 5
+    audio.volume = 0.4;         // volumen elegante
+    audio.loop = true;          // loop activado
 
-  if (audio.readyState >= 2) {
-    playAudio();
-  } else {
-    audio.addEventListener('canplay', playAudio, { once: true });
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        console.log("Autoplay bloqueado por navegador");
+      });
+    }
   }
 
   // Fade out pantalla del sobre
   setTimeout(() => {
-    screen.classList.add('hidden');
+    if (screen) screen.classList.add('hidden');
   }, 1800);
 }
+
 
 
 /* ─────────────────────────────────────────────
@@ -67,6 +84,7 @@ document.addEventListener('mousemove', e => {
 })();
 
 
+
 /* ─────────────────────────────────────────────
    ⏳ COUNTDOWN
 ───────────────────────────────────────────── */
@@ -77,7 +95,6 @@ function updateCountdown() {
   const now = new Date();
 
   let diff = target - now;
-
   if (diff < 0) diff = 0;
 
   const d = Math.floor(diff / 86400000);
@@ -100,6 +117,7 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 
 
+
 /* ─────────────────────────────────────────────
    ✨ SCROLL REVEAL
 ───────────────────────────────────────────── */
@@ -114,6 +132,7 @@ const observer = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.reveal')
   .forEach(el => observer.observe(el));
+
 
 
 /* ─────────────────────────────────────────────
