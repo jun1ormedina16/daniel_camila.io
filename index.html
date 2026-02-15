@@ -20,9 +20,10 @@
   <div class="cursor-ring" id="cursorRing"></div>
 
   <!-- Audio -->
-  <audio id="bg-audio" preload="auto">
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bg-audio" preload="auto" playsinline>
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
 
   <!-- ─── ENVELOPE SCREEN ───────────────────────── -->
   <div id="envelope-screen">
@@ -31,7 +32,8 @@
       <!-- Click hint ABOVE the envelope -->
       <p class="env-hint">Toca el sobre para abrir</p>
 
-      <div class="envelope" id="envelope" onclick="openEnvelope()">
+      <div id="envelope" onclick="openEnvelope()" ontouchstart="openEnvelope()">
+
         <div class="env-body-wrap">
           <div class="env-body">
 
@@ -304,7 +306,7 @@
   <h2>Confirma tu asistencia</h2>
 
   <a 
-    href="https://wa.me/573197111615?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%2C%20all%C3%A1%20nos%20vemos..."
+    href="https://wa.me/573103179593?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%2C%20all%C3%A1%20nos%20vemos..."
     target="_blank"
     class="whatsapp-btn">
     Confirmar asistencia
