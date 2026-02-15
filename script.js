@@ -1,25 +1,11 @@
 /* ─────────────────────────────────────────────
-   🎵 AUDIO UNLOCK (ANTI iPHONE)
+   🎵 AUDIO UNIVERSAL (ANDROID / IPHONE / PC)
 ───────────────────────────────────────────── */
 
 const audio = document.getElementById('bg-audio');
 
-// Desbloquea el audio en móviles al primer toque
-document.addEventListener('touchstart', function unlockAudio() {
-  if (!audio) return;
-
-  audio.play().then(() => {
-    audio.pause();
-    audio.currentTime = 0;
-  }).catch(() => {});
-
-  document.removeEventListener('touchstart', unlockAudio);
-}, { once: true });
-
-
-
 /* ─────────────────────────────────────────────
-   💌 ENVELOPE
+   💌 ENVELOPE + AUDIO UNIVERSAL
 ───────────────────────────────────────────── */
 
 function openEnvelope() {
@@ -31,27 +17,37 @@ function openEnvelope() {
 
   env.classList.add('open');
 
-  // 🔥 Iniciar música correctamente
   if (audio) {
-    audio.currentTime = 5;      // empieza desde segundo 5
-    audio.volume = 0.4;         // volumen elegante
-    audio.loop = true;          // loop activado
+    audio.loop = true;
+    audio.volume = 0; // empieza en 0 para evitar bloqueo iOS
 
     const playPromise = audio.play();
 
     if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        console.log("Autoplay bloqueado por navegador");
+      playPromise.then(() => {
+
+        // 🔥 Fade in elegante compatible con iPhone
+        let vol = 0;
+        const fade = setInterval(() => {
+          if (vol < 0.5) {
+            vol += 0.05;
+            audio.volume = vol;
+          } else {
+            clearInterval(fade);
+          }
+        }, 200);
+
+      }).catch(err => {
+        console.log("Audio bloqueado:", err);
       });
     }
   }
 
-  // Fade out pantalla del sobre
+  // Oculta pantalla del sobre después de animación
   setTimeout(() => {
     if (screen) screen.classList.add('hidden');
   }, 1800);
 }
-
 
 
 /* ─────────────────────────────────────────────
@@ -82,7 +78,6 @@ document.addEventListener('mousemove', e => {
   }
   requestAnimationFrame(animCursor);
 })();
-
 
 
 /* ─────────────────────────────────────────────
@@ -117,7 +112,6 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 
 
-
 /* ─────────────────────────────────────────────
    ✨ SCROLL REVEAL
 ───────────────────────────────────────────── */
@@ -134,12 +128,11 @@ document.querySelectorAll('.reveal')
   .forEach(el => observer.observe(el));
 
 
-
 /* ─────────────────────────────────────────────
    📝 RSVP → GOOGLE SHEETS
 ───────────────────────────────────────────── */
 
-const SCRIPT_URL = 'AQUI_TU_GOOGLE_SCRIPT_URL';
+const SCRIPT_URL = 'AQUI_TU_GOOGLE_SCRIPT_URL'; // reemplaza con tu script de Google
 
 const form = document.getElementById('rsvpForm');
 
@@ -169,7 +162,9 @@ if (form) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-    } catch (err) {}
+    } catch (err) {
+      console.log("Error enviando RSVP:", err);
+    }
 
     form.style.display = 'none';
 

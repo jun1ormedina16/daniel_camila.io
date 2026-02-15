@@ -15,11 +15,6 @@
 
 <body>
 
-  <!-- Cursor -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
-  <!-- Audio -->
 <audio id="bg-audio" preload="auto" playsinline>
   <source src="musica.mp3" type="audio/mpeg">
 </audio>
@@ -32,8 +27,7 @@
       <!-- Click hint ABOVE the envelope -->
       <p class="env-hint">Toca el sobre para abrir</p>
 
-      <div id="envelope" onclick="openEnvelope()" ontouchstart="openEnvelope()">
-
+      <div class="envelope" id="envelope" onclick="openEnvelope()">
         <div class="env-body-wrap">
           <div class="env-body">
 
